@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#075e54">
+  <title>Tres desviadas y una impostora</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="avatars">
+        <span class="av clau">C</span><span class="av pau">P</span><span class="av ju">J</span>
+      </div>
+      <div class="info">
+        <h1>Tres desviadas y una impostora</h1>
+        <p id="status">Clau, Pau, Ju y tú</p>
+      </div>
+      <button class="round" id="btnMenu" type="button" aria-label="Ajustes">⋮</button>
+    </header>
+
+    <main id="messages" aria-live="polite"></main>
+
+    <form id="chatForm" autocomplete="off">
+      <button class="round" id="btnKey" type="button" aria-label="API Key y ajustes">🔑</button>
+      <input id="input" type="text" placeholder="Escribe un mensaje" maxlength="500" aria-label="Mensaje">
+      <button class="round" id="send" type="submit" aria-label="Enviar">➤</button>
+    </form>
+  </div>
+
+  <dialog id="dlg">
+    <form id="cfg" method="dialog">
+      <h2>Ajustes</h2>
+      <label for="provider">Proveedor</label>
+      <select id="provider">
+        <option value="openrouter">OpenRouter</option>
+        <option value="openai">OpenAI</option>
+        <option value="local">Local (Ollama / LM Studio)</option>
+      </select>
+      <div id="keyBox">
+        <label for="apiKey">API Key</label>
+        <input id="apiKey" type="password" autocomplete="off" placeholder="sk-...">
+      </div>
+      <div id="urlBox" hidden>
+        <label for="localUrl">URL del servidor local</label>
+        <input id="localUrl" type="url" autocomplete="off" placeholder="http://localhost:11434/v1/chat/completions">
+      </div>
+      <label for="model">Modelo</label>
+      <input id="model" type="text" autocomplete="off">
+      <label for="memory">Memoria del grupo (editable)</label>
+      <textarea id="memory" placeholder="Aquí irán apareciendo tus datos y las bromas internas."></textarea>
+      <p class="hint">La clave se guarda solo en este navegador (localStorage).</p>
+      <div class="actions">
+        <button value="cancel" formnovalidate>Cerrar</button>
+        <button value="save">Guardar</button>
+      </div>
+      <button type="button" class="danger" id="reset">Reiniciar memoria e historial</button>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
