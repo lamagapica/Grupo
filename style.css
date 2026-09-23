@@ -1,0 +1,113 @@
+:root {
+  --clau: #8e44ad; --pau: #d35400; --ju: #16a085;
+  --head: #075e54; --bg: #efeae2; --mine: #d9fdd3; --other: #fff;
+  --ink: #111b21; --muted: #667781;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body {
+  font: 15px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink); background: #d1d7db; display: flex; justify-content: center;
+}
+.app {
+  width: 100%; max-width: 760px; height: 100dvh; display: flex; flex-direction: column;
+  background: var(--bg); box-shadow: 0 0 30px #0003;
+}
+
+header {
+  display: flex; align-items: center; gap: 12px; color: #fff; background: var(--head);
+  padding: 10px 8px 10px 12px; padding-top: calc(10px + env(safe-area-inset-top));
+}
+.avatars { display: flex; }
+.avatars .av { margin-left: -8px; border: 2px solid var(--head); }
+.avatars .av:first-child { margin-left: 0; }
+.info { flex: 1; min-width: 0; }
+h1 { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#status { font-size: 12px; opacity: .85; min-height: 16px; }
+
+.av {
+  flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 700; font-size: 15px; color: #fff;
+}
+.av.clau { background: var(--clau); } .av.pau { background: var(--pau); } .av.ju { background: var(--ju); }
+
+main {
+  flex: 1; overflow-y: auto; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px;
+  overscroll-behavior: contain;
+}
+.msg { display: flex; gap: 6px; align-items: flex-end; max-width: 85%; animation: pop .18s ease-out; }
+.msg .av { width: 28px; height: 28px; font-size: 13px; }
+.msg.mine { align-self: flex-end; flex-direction: row-reverse; }
+.bubble {
+  background: var(--other); padding: 6px 9px 4px; border-radius: 0 10px 10px 10px;
+  box-shadow: 0 1px 1px #0002; min-width: 0; overflow-wrap: anywhere;
+}
+.mine .bubble { background: var(--mine); border-radius: 10px 0 10px 10px; }
+.name { font-size: 12.5px; font-weight: 700; }
+.clau .name, .quote.clau b { color: var(--clau); }
+.pau .name, .quote.pau b { color: var(--pau); }
+.ju .name, .quote.ju b { color: var(--ju); }
+.quote {
+  border-left: 4px solid currentColor; background: #0000000d; border-radius: 4px;
+  padding: 2px 6px; margin: 2px 0 4px; font-size: 13px; color: var(--muted);
+}
+.quote.clau { border-color: var(--clau); } .quote.pau { border-color: var(--pau); }
+.quote.ju { border-color: var(--ju); } .quote.user { border-color: #00a884; }
+.quote b { display: block; font-size: 12px; }
+.time { float: right; margin: 5px 0 0 10px; font-size: 11px; color: var(--muted); }
+.sys {
+  align-self: center; max-width: 90%; text-align: center; font-size: 12.5px;
+  padding: 4px 10px; border-radius: 8px; background: #fff8c5; color: #54470a;
+}
+
+.dots i {
+  display: inline-block; width: 5px; height: 5px; margin-left: 3px; border-radius: 50%;
+  background: currentColor; animation: blink 1.2s infinite;
+}
+.dots i:nth-child(2) { animation-delay: .2s; }
+.dots i:nth-child(3) { animation-delay: .4s; }
+.tb .bubble { color: var(--muted); padding: 10px 12px; }
+@keyframes blink { 0%, 60%, 100% { opacity: .25; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+
+form#chatForm {
+  display: flex; align-items: center; gap: 6px; background: #f0f2f5;
+  padding: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom));
+}
+#input {
+  flex: 1; min-width: 0; border: 0; border-radius: 22px; padding: 11px 15px;
+  font: inherit; font-size: 16px; background: #fff; outline: none;
+}
+.round {
+  flex: none; width: 42px; height: 42px; border: 0; border-radius: 50%; display: grid;
+  place-items: center; font-size: 18px; color: inherit; background: transparent; cursor: pointer;
+}
+#send { background: #00a884; color: #fff; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #00a884; outline-offset: 2px;
+}
+
+dialog {
+  border: 0; border-radius: 14px; padding: 18px; width: min(92vw, 440px);
+  box-shadow: 0 10px 40px #0005; margin: auto;
+}
+dialog::backdrop { background: #0008; }
+dialog h2 { font-size: 18px; }
+dialog label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+dialog input, dialog select, dialog textarea {
+  width: 100%; padding: 9px; border: 1px solid #c5ccd0; border-radius: 8px; font: inherit; font-size: 16px;
+}
+dialog textarea { height: 130px; resize: vertical; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+.actions button {
+  padding: 8px 16px; border: 0; border-radius: 8px; font: inherit; cursor: pointer; background: #e9edef;
+}
+.actions button[value="save"] { background: #00a884; color: #fff; }
+.danger {
+  margin-top: 12px; background: none; border: 0; padding: 0; font-size: 12px;
+  color: #b3261e; text-decoration: underline; cursor: pointer;
+}
+
+@media (max-width: 760px) { body { background: var(--bg); } .app { box-shadow: none; } }
+@media (prefers-reduced-motion: reduce) { .msg { animation: none; } }
