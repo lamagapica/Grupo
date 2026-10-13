@@ -1,64 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#075e54">
-  <title>Tres desviadas y una impostora</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#008069">
+  <title>Trío de IAs</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💬%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app">
-    <header>
-      <div class="avatars">
-        <span class="av clau">C</span><span class="av pau">P</span><span class="av ju">J</span>
+    <header class="header">
+      <div class="group-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3zM8 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 1.9 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/></svg>
       </div>
-      <div class="info">
-        <h1>Tres desviadas y una impostora</h1>
-        <p id="status">Clau, Pau, Ju y tú</p>
+      <div class="title">
+        <h1 id="groupTitle">Trío de IAs</h1>
+        <div class="subtitle" id="subtitle"></div>
       </div>
-      <button class="round" id="btnMenu" type="button" aria-label="Ajustes">⋮</button>
+      <button type="button" class="icon-btn" id="menuBtn" aria-label="Menú" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+      <div class="menu" id="menu" hidden>
+        <button type="button" id="openSettings">Ajustes de las IAs</button>
+        <button type="button" id="clearChat">Vaciar chat</button>
+      </div>
     </header>
 
-    <main id="messages" aria-live="polite"></main>
+    <main class="chat" id="chat"></main>
 
-    <form id="chatForm" autocomplete="off">
-      <button class="round" id="btnKey" type="button" aria-label="API Key y ajustes">🔑</button>
-      <input id="input" type="text" placeholder="Escribe un mensaje" maxlength="500" aria-label="Mensaje">
-      <button class="round" id="send" type="submit" aria-label="Enviar">➤</button>
+    <div class="mentions" id="mentions"></div>
+    <form class="composer" id="composer">
+      <textarea id="input" rows="1" placeholder="Escribe un mensaje" aria-label="Mensaje"></textarea>
+      <button type="submit" class="send" id="sendBtn" aria-label="Enviar"></button>
     </form>
   </div>
 
-  <dialog id="dlg">
-    <form id="cfg" method="dialog">
-      <h2>Ajustes</h2>
-      <label for="provider">Proveedor</label>
-      <select id="provider">
-        <option value="openrouter">OpenRouter</option>
-        <option value="openai">OpenAI</option>
-        <option value="local">Local (Ollama / LM Studio)</option>
-      </select>
-      <div id="keyBox">
-        <label for="apiKey">API Key</label>
-        <input id="apiKey" type="password" autocomplete="off" placeholder="sk-...">
+  <dialog id="settings" aria-labelledby="settingsTitle">
+    <form id="settingsForm">
+      <div class="dlg-head"><h2 id="settingsTitle">Ajustes</h2></div>
+      <div class="dlg-body">
+        <label for="apiKey">Clave de API de Anthropic</label>
+        <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-...">
+        <p class="hint">Se guarda solo en este navegador. No la subas nunca a GitHub.</p>
+
+        <label for="groupName">Nombre del grupo</label>
+        <input id="groupName" type="text" maxlength="40">
+
+        <label for="maxExchanges">Réplicas máximas entre IAs por mensaje</label>
+        <input id="maxExchanges" type="number" min="0" max="12" step="1">
+        <p class="hint">Con 0 las IAs solo te responden a ti. Más réplicas hacen más larga la conversación entre ellas, y también más cara.</p>
+
+        <div id="aiFields"></div>
       </div>
-      <div id="urlBox" hidden>
-        <label for="localUrl">URL del servidor local</label>
-        <input id="localUrl" type="url" autocomplete="off" placeholder="http://localhost:11434/v1/chat/completions">
+      <div class="dlg-foot">
+        <button type="button" class="btn" id="resetAis">Restaurar IAs</button>
+        <span class="grow"></span>
+        <button type="button" class="btn" id="cancelSettings">Cancelar</button>
+        <button type="submit" class="btn primary">Guardar</button>
       </div>
-      <label for="model">Modelo</label>
-      <input id="model" type="text" autocomplete="off">
-      <label for="memory">Memoria del grupo (editable)</label>
-      <textarea id="memory" placeholder="Aquí irán apareciendo tus datos y las bromas internas."></textarea>
-      <p class="hint">La clave se guarda solo en este navegador (localStorage).</p>
-      <div class="actions">
-        <button value="cancel" formnovalidate>Cerrar</button>
-        <button value="save">Guardar</button>
-      </div>
-      <button type="button" class="danger" id="reset">Reiniciar memoria e historial</button>
     </form>
   </dialog>
 
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
