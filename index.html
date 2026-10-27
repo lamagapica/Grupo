@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English Mastery B1-B2</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-lg font-bold tracking-tight text-slate-900">English Master</span>
+                <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-0.5 rounded-full">B1-B2</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <!-- Streak Quick Display -->
+                <div onclick="showSection('progress')" class="cursor-pointer flex items-center space-x-1 px-3 py-1 bg-amber-50 rounded-full border border-amber-200">
+                    <span class="text-xs font-bold text-amber-700">Racha:</span>
+                    <span id="headerStreakCount" class="text-xs font-bold text-amber-700">0 días</span>
+                </div>
+
+                <!-- Mobile Install Button -->
+                <button id="installAppBtn" onclick="installAppPrompt()" class="text-xs font-medium bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-full transition-all duration-200 flex items-center space-x-1 shadow-xs">
+                    <span>Instalar App</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow mb-16">
+        
+        <!-- SECTION: VOCABULARY -->
+        <section id="sec-vocab" class="space-y-6">
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold text-slate-900">Vocabulario B1 - B2</h1>
+                <p class="text-slate-500 text-xs">Términos esenciales con pronunciación y contexto.</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+                <input type="text" id="vocabSearch" oninput="filterVocab()" placeholder="Buscar palabra o traducción..." 
+                       class="w-full px-4 py-3 bg-white rounded-xl border border-slate-200 text-xs focus:ring-1 focus:ring-slate-900 outline-hidden transition-all">
+            </div>
+
+            <!-- Words List -->
+            <div id="vocabList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <!-- JS Populated Items -->
+            </div>
+        </section>
+
+        <!-- SECTION: GRAMMAR -->
+        <section id="sec-grammar" class="hidden space-y-6">
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold text-slate-900">Gramática B1 - B2</h1>
+                <p class="text-slate-500 text-xs">Explicaciones claras y ejercicios prácticos.</p>
+            </div>
+
+            <!-- Grammar Topics Tabs -->
+            <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1" id="grammarTabs">
+                <button onclick="switchGrammarTab('conditionals')" id="tab-conditionals" class="px-3 py-1.5 rounded-full text-xs font-medium bg-slate-900 text-white transition-all whitespace-nowrap">Conditionals</button>
+                <button onclick="switchGrammarTab('passive')" id="tab-passive" class="px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 transition-all whitespace-nowrap">Passive Voice</button>
+                <button onclick="switchGrammarTab('phrasal')" id="tab-phrasal" class="px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 transition-all whitespace-nowrap">Phrasal Verbs</button>
+                <button onclick="switchGrammarTab('modals')" id="tab-modals" class="px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 transition-all whitespace-nowrap">Modal Verbs</button>
+                <button onclick="switchGrammarTab('usedTo')" id="tab-usedTo" class="px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 transition-all whitespace-nowrap">Used to vs Would</button>
+            </div>
+
+            <!-- Grammar Display Container -->
+            <div id="grammarContent" class="bg-white p-5 rounded-2xl border border-slate-100 space-y-5">
+                <!-- Dynamic Content Loaded by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION: INTERACTIVE PRACTICE & GAMES -->
+        <section id="sec-practice" class="hidden space-y-6">
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold text-slate-900">Juegos y Práctica</h1>
+                <p class="text-slate-500 text-xs">Selecciona un juego para reforzar tu vocabulario y gramática.</p>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <button onclick="startPracticeMode('flashcards')" id="mode-flashcards" class="p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-900">
+                    <span class="block font-semibold text-slate-900 text-xs">Flashcards</span>
+                    <span class="block text-[10px] text-slate-400 mt-0.5">Tarjetas de repaso</span>
+                </button>
+                <button onclick="startPracticeMode('quiz')" id="mode-quiz" class="p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-200">
+                    <span class="block font-semibold text-slate-900 text-xs">Quiz</span>
+                    <span class="block text-[10px] text-slate-400 mt-0.5">Opción múltiple</span>
+                </button>
+                <button onclick="startPracticeMode('match')" id="mode-match" class="p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-200">
+                    <span class="block font-semibold text-slate-900 text-xs">Emparejar</span>
+                    <span class="block text-[10px] text-slate-400 mt-0.5">Juego de parejas</span>
+                </button>
+                <button onclick="startPracticeMode('fill')" id="mode-fill" class="p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-200">
+                    <span class="block font-semibold text-slate-900 text-xs">Completar</span>
+                    <span class="block text-[10px] text-slate-400 mt-0.5">Rellena el espacio</span>
+                </button>
+                <button onclick="startPracticeMode('timeattack')" id="mode-timeattack" class="p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-200 col-span-2 md:col-span-1">
+                    <span class="block font-semibold text-slate-900 text-xs">Contra El Reloj</span>
+                    <span class="block text-[10px] text-slate-400 mt-0.5">60 segundos de reto</span>
+                </button>
+            </div>
+
+            <!-- Practice Area -->
+            <div id="practiceArea" class="mt-4">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- SECTION: PROGRESS & STREAK -->
+        <section id="sec-progress" class="hidden space-y-6">
+            <div class="space-y-1">
+                <h1 class="text-xl font-bold text-slate-900">Racha y Estadísticas</h1>
+                <p class="text-slate-500 text-xs">Seguimiento de tu constancia diaria y rendimiento.</p>
+            </div>
+
+            <!-- Stats Overview Grid -->
+            <div class="grid grid-cols-3 gap-2">
+                <div class="bg-white p-4 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-[10px] text-slate-400 font-medium uppercase">Racha Actual</span>
+                    <span id="streakCount" class="text-xl font-bold text-amber-600 mt-1 block">0 días</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-[10px] text-slate-400 font-medium uppercase">Dominadas</span>
+                    <span id="masteredCount" class="text-xl font-bold text-slate-800 mt-1 block">0 / 20</span>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-100 text-center">
+                    <span class="block text-[10px] text-slate-400 font-medium uppercase">Puntuación</span>
+                    <span id="scoreCount" class="text-xl font-bold text-slate-900 mt-1 block">0 pts</span>
+                </div>
+            </div>
+
+            <!-- Calendar Streak Tracker -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Registro de los últimos 7 días</h2>
+                    <span id="streakStatusText" class="text-[10px] font-medium text-slate-500">Completa una lección hoy</span>
+                </div>
+                <div id="streakCalendar" class="grid grid-cols-7 gap-1.5 text-center pt-2">
+                    <!-- Dynamic rendering of last 7 days -->
+                </div>
+            </div>
+
+            <!-- Progress List -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 space-y-3">
+                <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado de Vocabulario</h2>
+                <div id="vocabProgressList" class="space-y-2 divide-y divide-slate-100 max-h-60 overflow-y-auto no-scrollbar">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-100 z-50">
+        <div class="max-w-4xl mx-auto flex justify-around py-3">
+            <button onclick="showSection('vocab')" id="nav-vocab" class="flex flex-col items-center px-3 text-slate-900">
+                <span class="text-xs font-semibold">Vocabulario</span>
+            </button>
+            <button onclick="showSection('grammar')" id="nav-grammar" class="flex flex-col items-center px-3 text-slate-400">
+                <span class="text-xs font-semibold">Gramática</span>
+            </button>
+            <button onclick="showSection('practice')" id="nav-practice" class="flex flex-col items-center px-3 text-slate-400">
+                <span class="text-xs font-semibold">Juegos</span>
+            </button>
+            <button onclick="showSection('progress')" id="nav-progress" class="flex flex-col items-center px-3 text-slate-400">
+                <span class="text-xs font-semibold">Racha</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-md opacity-0 pointer-events-none transition-all duration-300 z-50">
+        Mensaje
+    </div>
+
+    <!-- PWA Installation / Instructions Modal -->
+    <div id="installModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white p-6 rounded-2xl max-w-sm w-full space-y-4 border border-slate-100">
+            <h3 class="text-base font-bold text-slate-900">Instalar en tu móvil</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Para añadir esta app a tu pantalla de inicio y usarla sin conexión:
+            </p>
+            <div class="bg-slate-50 p-3 rounded-xl text-xs space-y-2 text-slate-700 border border-slate-100">
+                <p><strong>iOS (Safari):</strong> Pulsa 'Compartir' y selecciona 'Añadir a la pantalla de inicio'.</p>
+                <p><strong>Android (Chrome):</strong> Pulsa los tres puntos superiores y selecciona 'Instalar aplicación'.</p>
+            </div>
+            <button onclick="closeInstallModal()" class="w-full py-2.5 bg-slate-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-800 transition-all">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        // VOCABULARY DATASET
+        const vocabularyData = [
+            { id: 1, word: "Loo", type: "Sustantivo", translation: "Baño", example: "I need to go to the loo before we leave.", mastered: false },
+            { id: 2, word: "Nosebleed", type: "Sustantivo", translation: "Sangrado de nariz", example: "The hot weather gave him a nosebleed.", mastered: false },
+            { id: 3, word: "Hungover", type: "Adjetivo", translation: "Resaca", example: "He felt hungover after attending the party last night.", mastered: false },
+            { id: 4, word: "Steal", type: "Verbo / Sustantivo", translation: "Robar / Robo (Ganga)", example: "At five dollars, this shirt is an absolute steal.", mastered: false },
+            { id: 5, word: "Regret", type: "Verbo / Sustantivo", translation: "Arrepentirse", example: "I do not regret making that decision.", mastered: false },
+            { id: 6, word: "Slightly", type: "Adverbio", translation: "Levemente / Ligeramente", example: "The temperature is slightly lower than yesterday.", mastered: false },
+            { id: 7, word: "Weed", type: "Sustantivo", translation: "Hierba / Mala hierba", example: "The garden was completely covered in weed.", mastered: false },
+            { id: 8, word: "Not that I recall", type: "Frase", translation: "No que yo recuerde", example: "Has he ever called you? Not that I recall.", mastered: false },
+            { id: 9, word: "Hand job", type: "Sustantivo", translation: "Paja / Masturbación", example: "An explicit term used in informal contexts.", mastered: false },
+            { id: 10, word: "What a waste", type: "Frase", translation: "Qué pérdida / Menuda pérdida", example: "You threw away good food; what a waste.", mastered: false },
+            { id: 11, word: "Walking me home", type: "Frase", translation: "Acompañándome a casa / Acompañarme a casa", example: "Thank you for walking me home tonight.", mastered: false },
+            { id: 12, word: "Glad", type: "Adjetivo", translation: "Contenta / Alegre", example: "I am really glad to hear that you passed the exam.", mastered: false },
+            { id: 13, word: "Snore", type: "Verbo / Sustantivo", translation: "Roncar", example: "My roommate tends to snore very loudly.", mastered: false },
+            { id: 14, word: "Accurate", type: "Adjetivo", translation: "Preciso / Exacto", example: "Her description of the event was very accurate.", mastered: false },
+            { id: 15, word: "Bother", type: "Verbo", translation: "Molestar / Preocuparse", example: "Sorry to bother you, but could you help me?", mastered: false },
+            { id: 16, word: "Catch up", type: "Phrasal Verb", translation: "Ponerse al día", example: "Let us meet for coffee and catch up.", mastered: false },
+            { id: 17, word: "Delay", type: "Verbo / Sustantivo", translation: "Retrasar / Retraso", example: "The flight was delayed due to heavy rain.", mastered: false },
+            { id: 18, word: "Eager", type: "Adjetivo", translation: "Deseoso / Con ganas", example: "She is eager to start her new job.", mastered: false },
+            { id: 19, word: "For instance", type: "Frase", translation: "Por ejemplo", example: "Many items, for instance fruits, are on sale.", mastered: false },
+            { id: 20, word: "Grasp", type: "Verbo", translation: "Comprender / Agarrar", example: "He struggled to grasp the complex theory.", mastered: false }
+        ];
+
+        // GRAMMAR DATASET
+        const grammarData = {
+            conditionals: {
+                title: "Condicionales (First & Second)",
+                rule: "First Conditional: Situaciones reales en el futuro (If + Present Simple, Will + Verb). Second Conditional: Situaciones hipotéticas o poco probables (If + Past Simple, Would + Verb).",
+                examples: [
+                    "If I study hard, I will pass the exam.",
+                    "If I won the lottery, I would buy a house."
+                ],
+                quiz: {
+                    question: "If I _____ enough money, I would travel around the world.",
+                    options: ["have", "had", "will have"],
+                    correct: 1
+                }
+            },
+            passive: {
+                title: "Voz Pasiva (Passive Voice)",
+                rule: "Enfatiza la acción en lugar del sujeto. Estructura: Objeto + Verbo To Be (en tiempo correspondiente) + Participio Pasado del verbo principal.",
+                examples: [
+                    "The book was written by Orwell.",
+                    "English is spoken all over the world."
+                ],
+                quiz: {
+                    question: "The stolen car _____ found by the police yesterday.",
+                    options: ["is", "was", "has been"],
+                    correct: 1
+                }
+            },
+            phrasal: {
+                title: "Phrasal Verbs Clave",
+                rule: "Verbos combinados con preposiciones o adverbios que cambian el significado original del verbo principal.",
+                examples: [
+                    "Give up: Dejar un hábito / Rendirse.",
+                    "Look forward to: Esperar con ilusión algo."
+                ],
+                quiz: {
+                    question: "I am really looking forward _____ you next week.",
+                    options: ["to see", "to seeing", "for see"],
+                    correct: 1
+                }
+            },
+            modals: {
+                title: "Verbos Modales (Modal Verbs)",
+                rule: "Modales de deducción y obligación (Must, Should, Might, Can't). Aportan matices de certeza, consejo o posibilidad.",
+                examples: [
+                    "You should see a doctor for that cough.",
+                    "She must be at home; the lights are on."
+                ],
+                quiz: {
+                    question: "He didn't sleep all night. He _____ be exhausted.",
+                    options: ["must", "should", "can't"],
+                    correct: 0
+                }
+            },
+            usedTo: {
+                title: "Used to vs Would",
+                rule: "'Used to' se aplica a hábitos pasados y estados que ya no son ciertos. 'Would' se usa solo para acciones o rutinas repetidas en el pasado (no estados).",
+                examples: [
+                    "I used to live in London. (Correcto - estado)",
+                    "Every summer we would go to the beach. (Correcto - acción repetida)"
+                ],
+                quiz: {
+                    question: "When I was young, I _____ have long hair.",
+                    options: ["used to", "would", "am used to"],
+                    correct: 0
+                }
+            }
+        };
+
+        // STATE APP & LOCALSTORAGE MANAGEMENT
+        let appState = {
+            score: 0,
+            streak: 0,
+            lastActiveDate: null,
+            historyDates: [],
+            currentPracticeMode: 'flashcards',
+            flashcardIndex: 0,
+            quizIndex: 0,
+            timeAttackTimer: null,
+            timeAttackLeft: 60,
+            timeAttackScore: 0
+        };
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            checkAndIncrementStreak();
+            renderVocabCards(vocabularyData);
+            switchGrammarTab('conditionals');
+            updateStatsUI();
+            setupPWA();
+        });
+
+        // STREAK AND LOCAL STORAGE LOGIC
+        function loadUserData() {
+            const savedState = localStorage.getItem('english_app_state');
+            if (savedState) {
+                try {
+                    const parsed = JSON.parse(savedState);
+                    appState.score = parsed.score || 0;
+                    appState.streak = parsed.streak || 0;
+                    appState.lastActiveDate = parsed.lastActiveDate || null;
+                    appState.historyDates = parsed.historyDates || [];
+                    if (parsed.masteredIds) {
+                        vocabularyData.forEach(v => {
+                            if (parsed.masteredIds.includes(v.id)) v.mastered = true;
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error loading user data", e);
+                }
+            }
+        }
+
+        function saveUserData() {
+            const masteredIds = vocabularyData.filter(v => v.mastered).map(v => v.id);
+            const dataToSave = {
+                score: appState.score,
+                streak: appState.streak,
+                lastActiveDate: appState.lastActiveDate,
+                historyDates: appState.historyDates,
+                masteredIds: masteredIds
+            };
+            localStorage.setItem('english_app_state', JSON.stringify(dataToSave));
+        }
+
+        function checkAndIncrementStreak() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            
+            if (!appState.historyDates.includes(todayStr)) {
+                appState.historyDates.push(todayStr);
+            }
+
+            if (!appState.lastActiveDate) {
+                appState.streak = 1;
+                appState.lastActiveDate = todayStr;
+            } else {
+                const lastDate = new Date(appState.lastActiveDate);
+                const today = new Date(todayStr);
+                const diffTime = Math.abs(today - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 1) {
+                    appState.streak += 1;
+                    appState.lastActiveDate = todayStr;
+                } else if (diffDays > 1) {
+                    appState.streak = 1;
+                    appState.lastActiveDate = todayStr;
+                }
+            }
+            saveUserData();
+        }
+
+        function renderStreakCalendar() {
+            const container = document.getElementById('streakCalendar');
+            container.innerHTML = '';
+
+            const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            const today = new Date();
+            
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                const dayName = daysOfWeek[d.getDay()];
+                const isCompleted = appState.historyDates.includes(dateStr);
+
+                const dayEl = document.createElement('div');
+                dayEl.className = `p-2 rounded-xl text-center flex flex-col items-center justify-center border ${isCompleted ? 'bg-amber-50 border-amber-300 text-amber-800' : 'bg-slate-50 border-slate-100 text-slate-400'}`;
+                dayEl.innerHTML = `
+                    <span class="text-[9px] font-bold uppercase">${dayName}</span>
+                    <span class="text-xs font-bold mt-1">${d.getDate()}</span>
+                    <span class="text-[9px] mt-1 font-semibold">${isCompleted ? 'Al día' : '-'}</span>
+                `;
+                container.appendChild(dayEl);
+            }
+        }
+
+        // SPEECH SYNTHESIS API
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast("Síntesis de voz no disponible");
+            }
+        }
+
+        // NAVIGATION LOGIC
+        function showSection(sectionId) {
+            if (appState.timeAttackTimer) clearInterval(appState.timeAttackTimer);
+
+            ['vocab', 'grammar', 'practice', 'progress'].forEach(sec => {
+                document.getElementById(`sec-${sec}`).classList.add('hidden');
+                const navBtn = document.getElementById(`nav-${sec}`);
+                navBtn.classList.remove('text-slate-900');
+                navBtn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`sec-${sectionId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${sectionId}`);
+            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.add('text-slate-900');
+
+            if (sectionId === 'practice') {
+                startPracticeMode(appState.currentPracticeMode);
+            } else if (sectionId === 'progress') {
+                renderProgressList();
+                renderStreakCalendar();
+            }
+        }
+
+        // VOCABULARY SECTION LOGIC
+        function renderVocabCards(items) {
+            const container = document.getElementById('vocabList');
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 col-span-2 text-center py-6">No se encontraron palabras.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-slate-100 flex flex-col justify-between space-y-2";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">${item.type}</span>
+                            <h3 class="text-base font-bold text-slate-900">${item.word}</h3>
+                            <p class="text-xs font-medium text-slate-600">${item.translation}</p>
+                        </div>
+                        <button onclick="speakWord('${item.word}')" class="px-2.5 py-1 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg text-slate-700 transition-all text-xs font-medium">
+                            Escuchar
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-500 italic bg-slate-50 p-2.5 rounded-lg border border-slate-100">"${item.example}"</p>
+                    <div class="pt-1">
+                        <button onclick="toggleMastered(${item.id})" class="w-full text-xs font-semibold py-1.5 rounded-lg border transition-all ${item.mastered ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200'}">
+                            ${item.mastered ? 'Aprendida' : 'Marcar como aprendida'}
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterVocab() {
+            const query = document.getElementById('vocabSearch').value.toLowerCase();
+            const filtered = vocabularyData.filter(item => 
+                item.word.toLowerCase().includes(query) || 
+                item.translation.toLowerCase().includes(query)
+            );
+            renderVocabCards(filtered);
+        }
+
+        function toggleMastered(id) {
+            const wordObj = vocabularyData.find(v => v.id === id);
+            if (wordObj) {
+                wordObj.mastered = !wordObj.mastered;
+                if (wordObj.mastered) {
+                    appState.score += 10;
+                    showToast("Palabra aprendida (+10 pts)");
+                } else {
+                    appState.score = Math.max(0, appState.score - 10);
+                }
+                saveUserData();
+                updateStatsUI();
+                filterVocab();
+            }
+        }
+
+        // GRAMMAR LOGIC
+        function switchGrammarTab(key) {
+            const tabs = ['conditionals', 'passive', 'phrasal', 'modals', 'usedTo'];
+            tabs.forEach(tab => {
+                const btn = document.getElementById(`tab-${tab}`);
+                if (tab === key) {
+                    btn.className = "px-3 py-1.5 rounded-full text-xs font-medium bg-slate-900 text-white transition-all whitespace-nowrap";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 transition-all whitespace-nowrap";
+                }
+            });
+
+            const data = grammarData[key];
+            const contentContainer = document.getElementById('grammarContent');
+            
+            contentContainer.innerHTML = `
+                <div class="space-y-2">
+                    <h2 class="text-base font-bold text-slate-900">${data.title}</h2>
+                    <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">${data.rule}</p>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ejemplos Prácticos</h3>
+                    <div class="space-y-1.5">
+                        ${data.examples.map(ex => `
+                            <div class="p-2.5 bg-slate-50 border border-slate-100 text-slate-800 rounded-xl text-xs font-medium flex justify-between items-center">
+                                <span>${ex}</span>
+                                <button onclick="speakWord('${ex.replace(/'/g, "\\'")}')" class="text-[10px] bg-white border border-slate-200 px-2 py-0.5 rounded-md font-semibold text-slate-700">Oír</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="space-y-2 pt-2">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ejercicio Rápido</h3>
+                    <p class="text-xs font-semibold text-slate-900">${data.quiz.question}</p>
+                    <div class="space-y-1.5" id="grammarQuizOptions">
+                        ${data.quiz.options.map((opt, idx) => `
+                            <button onclick="checkGrammarAnswer(${idx}, ${data.quiz.correct})" class="w-full text-left p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 hover:bg-slate-100 transition-all font-medium">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkGrammarAnswer(selectedIndex, correctIndex) {
+            const container = document.getElementById('grammarQuizOptions');
+            const buttons = container.querySelectorAll('button');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIndex) {
+                    btn.className = "w-full text-left p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold";
+                } else if (idx === selectedIndex) {
+                    btn.className = "w-full text-left p-2.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 text-xs font-semibold";
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                appState.score += 15;
+                showToast("¡Respuesta Correcta! (+15 pts)");
+                saveUserData();
+                updateStatsUI();
+            } else {
+                showToast("Respuesta incorrecta");
+            }
+        }
+
+        // PRACTICE GAME MODES
+        function startPracticeMode(mode) {
+            if (appState.timeAttackTimer) clearInterval(appState.timeAttackTimer);
+            appState.currentPracticeMode = mode;
+            
+            ['flashcards', 'quiz', 'match', 'fill', 'timeattack'].forEach(m => {
+                const btn = document.getElementById(`mode-${m}`);
+                if (m === mode) {
+                    btn.className = "p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-900";
+                } else {
+                    btn.className = "p-3 bg-white rounded-xl text-left hover:bg-slate-50 transition-all border border-slate-200";
+                }
+            });
+
+            const area = document.getElementById('practiceArea');
+            area.innerHTML = '';
+
+            if (mode === 'flashcards') renderFlashcardsMode(area);
+            else if (mode === 'quiz') renderQuizMode(area);
+            else if (mode === 'match') renderMatchMode(area);
+            else if (mode === 'fill') renderFillMode(area);
+            else if (mode === 'timeattack') renderTimeAttackMode(area);
+        }
+
+        // FLASHCARDS GAME
+        function renderFlashcardsMode(container) {
+            const word = vocabularyData[appState.flashcardIndex];
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 text-center space-y-5 max-w-md mx-auto">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tarjeta ${appState.flashcardIndex + 1} de ${vocabularyData.length}</span>
+                    <div id="flashcardBox" onclick="flipFlashcard()" class="min-h-[140px] bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-center items-center cursor-pointer">
+                        <h2 id="cardText" class="text-xl font-bold text-slate-900">${word.word}</h2>
+                        <span id="cardSub" class="text-xs text-slate-400 mt-2 font-medium">Toca para revelar el significado</span>
+                    </div>
+                    <div class="flex justify-between items-center space-x-2">
+                        <button onclick="prevFlashcard()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-200 transition-all">Anterior</button>
+                        <button onclick="speakWord('${word.word}')" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold">Oír</button>
+                        <button onclick="nextFlashcard()" class="flex-1 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-all">Siguiente</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        let isCardFlipped = false;
+        function flipFlashcard() {
+            const word = vocabularyData[appState.flashcardIndex];
+            const textEl = document.getElementById('cardText');
+            const subEl = document.getElementById('cardSub');
+            
+            if (!isCardFlipped) {
+                textEl.innerText = word.translation;
+                subEl.innerText = `Ejemplo: ${word.example}`;
+                isCardFlipped = true;
+            } else {
+                textEl.innerText = word.word;
+                subEl.innerText = "Toca para revelar el significado";
+                isCardFlipped = false;
+            }
+        }
+
+        function nextFlashcard() {
+            isCardFlipped = false;
+            appState.flashcardIndex = (appState.flashcardIndex + 1) % vocabularyData.length;
+            renderFlashcardsMode(document.getElementById('practiceArea'));
+        }
+
+        function prevFlashcard() {
+            isCardFlipped = false;
+            appState.flashcardIndex = (appState.flashcardIndex - 1 + vocabularyData.length) % vocabularyData.length;
+            renderFlashcardsMode(document.getElementById('practiceArea'));
+        }
+
+        // QUIZ GAME
+        function renderQuizMode(container) {
+            const currentItem = vocabularyData[appState.quizIndex];
+            let options = [currentItem.translation];
+            while (options.length < 4) {
+                const randomWord = vocabularyData[Math.floor(Math.random() * vocabularyData.length)].translation;
+                if (!options.includes(randomWord)) options.push(randomWord);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-5 max-w-md mx-auto">
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold">
+                        <span>Pregunta ${appState.quizIndex + 1} de ${vocabularyData.length}</span>
+                    </div>
+                    <div class="text-center py-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">¿Qué significa?</span>
+                        <h2 class="text-lg font-bold text-slate-900 mt-1">${currentItem.word}</h2>
+                    </div>
+                    <div class="space-y-2">
+                        ${options.map(opt => `
+                            <button onclick="submitQuizAnswer('${opt.replace(/'/g, "\\'")}', '${currentItem.translation.replace(/'/g, "\\'")}')" class="w-full text-left p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitQuizAnswer(selected, correct) {
+            if (selected === correct) {
+                appState.score += 10;
+                showToast("¡Correcto! (+10 pts)");
+            } else {
+                showToast(`Incorrecto. Era: ${correct}`);
+            }
+            saveUserData();
+            updateStatsUI();
+            appState.quizIndex = (appState.quizIndex + 1) % vocabularyData.length;
+            renderQuizMode(document.getElementById('practiceArea'));
+        }
+
+        // MATCHING GAME
+        let selectedMatch = null;
+        function renderMatchMode(container) {
+            const sample = [...vocabularyData].sort(() => Math.random() - 0.5).slice(0, 4);
+            const englishList = [...sample].sort(() => Math.random() - 0.5);
+            const spanishList = [...sample].sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-5 max-w-md mx-auto">
+                    <p class="text-xs text-slate-500 text-center">Selecciona un concepto en inglés y luego su traducción correspondiente.</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-2">
+                            ${englishList.map(item => `
+                                <button onclick="handleMatchSelect('en', ${item.id}, this)" class="w-full p-2.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-all">
+                                    ${item.word}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div class="space-y-2">
+                            ${spanishList.map(item => `
+                                <button onclick="handleMatchSelect('es', ${item.id}, this)" class="w-full p-2.5 bg-slate-50 border border-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-all">
+                                    ${item.translation}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button onclick="renderMatchMode(document.getElementById('practiceArea'))" class="w-full py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-200 transition-all">
+                        Reiniciar Juego
+                    </button>
+                </div>
+            `;
+            selectedMatch = null;
+        }
+
+        function handleMatchSelect(type, id, btnElement) {
+            if (!selectedMatch) {
+                selectedMatch = { type, id, element: btnElement };
+                btnElement.classList.add('border-slate-900', 'bg-slate-100');
+            } else {
+                if (selectedMatch.type === type) {
+                    selectedMatch.element.classList.remove('border-slate-900', 'bg-slate-100');
+                    selectedMatch = { type, id, element: btnElement };
+                    btnElement.classList.add('border-slate-900', 'bg-slate-100');
+                } else {
+                    if (selectedMatch.id === id) {
+                        btnElement.classList.className = "";
+                        btnElement.className = "w-full p-2.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-semibold";
+                        selectedMatch.element.className = "w-full p-2.5 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-semibold";
+                        btnElement.disabled = true;
+                        selectedMatch.element.disabled = true;
+                        appState.score += 15;
+                        showToast("¡Pareja Correcta! (+15 pts)");
+                        saveUserData();
+                        updateStatsUI();
+                    } else {
+                        btnElement.classList.add('border-rose-400', 'bg-rose-50');
+                        selectedMatch.element.classList.add('border-rose-400', 'bg-rose-50');
+                        setTimeout(() => {
+                            btnElement.classList.remove('border-rose-400', 'bg-rose-50');
+                            selectedMatch.element.classList.remove('border-rose-400', 'bg-rose-50', 'border-slate-900', 'bg-slate-100');
+                        }, 500);
+                        showToast("No coinciden");
+                    }
+                    selectedMatch = null;
+                }
+            }
+        }
+
+        // FILL IN THE BLANKS GAME
+        function renderFillMode(container) {
+            const currentItem = vocabularyData[appState.quizIndex];
+            const sentenceWithBlank = currentItem.example.replace(new RegExp(currentItem.word, 'gi'), '_______');
+
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-5 max-w-md mx-auto">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Completar la Frase</span>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-xs font-medium text-slate-800 leading-relaxed">"${sentenceWithBlank}"</p>
+                        <span class="text-[10px] text-slate-400 block mt-2 font-semibold">Traducción: ${currentItem.translation}</span>
+                    </div>
+                    <div class="space-y-2">
+                        <input type="text" id="fillInput" placeholder="Escribe la palabra faltante..." class="w-full p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs outline-hidden focus:ring-1 focus:ring-slate-900">
+                        <button onclick="checkFillAnswer('${currentItem.word.replace(/'/g, "\\'")}')" class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-all">
+                            Comprobar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkFillAnswer(correctWord) {
+            const val = document.getElementById('fillInput').value.trim().toLowerCase();
+            if (val === correctWord.toLowerCase()) {
+                appState.score += 20;
+                showToast("¡Correcto! (+20 pts)");
+                saveUserData();
+                updateStatsUI();
+                appState.quizIndex = (appState.quizIndex + 1) % vocabularyData.length;
+                renderFillMode(document.getElementById('practiceArea'));
+            } else {
+                showToast(`Pista: Comienza por '${correctWord.charAt(0)}'`);
+            }
+        }
+
+        // TIME ATTACK CHALLENGE
+        function renderTimeAttackMode(container) {
+            appState.timeAttackLeft = 60;
+            appState.timeAttackScore = 0;
+
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 space-y-5 max-w-md mx-auto text-center">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-600">
+                        <span>Tiempo: <span id="taTimer" class="text-rose-600 font-mono text-sm">60s</span></span>
+                        <span>Aciertos: <span id="taScore" class="text-emerald-600 text-sm">0</span></span>
+                    </div>
+                    <div id="taContent" class="space-y-4">
+                        <button onclick="startTimeAttackLoop()" class="w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition-all">
+                            Iniciar Reto (60 segundos)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startTimeAttackLoop() {
+            appState.timeAttackTimer = setInterval(() => {
+                appState.timeAttackLeft--;
+                document.getElementById('taTimer').innerText = `${appState.timeAttackLeft}s`;
+                if (appState.timeAttackLeft <= 0) {
+                    clearInterval(appState.timeAttackTimer);
+                    finishTimeAttack();
+                }
+            }, 1000);
+
+            nextTimeAttackQuestion();
+        }
+
+        function nextTimeAttackQuestion() {
+            if (appState.timeAttackLeft <= 0) return;
+
+            const randomItem = vocabularyData[Math.floor(Math.random() * vocabularyData.length)];
+            let options = [randomItem.translation];
+            while (options.length < 3) {
+                const opt = vocabularyData[Math.floor(Math.random() * vocabularyData.length)].translation;
+                if (!options.includes(opt)) options.push(opt);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const content = document.getElementById('taContent');
+            content.innerHTML = `
+                <div class="py-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold">Traduce la palabra</span>
+                    <h3 class="text-base font-bold text-slate-900 mt-0.5">${randomItem.word}</h3>
+                </div>
+                <div class="space-y-2">
+                    ${options.map(opt => `
+                        <button onclick="handleTimeAttackAnswer('${opt.replace(/'/g, "\\'")}', '${randomItem.translation.replace(/'/g, "\\'")}')" class="w-full text-left p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function handleTimeAttackAnswer(selected, correct) {
+            if (selected === correct) {
+                appState.timeAttackScore++;
+                appState.score += 5;
+                document.getElementById('taScore').innerText = appState.timeAttackScore;
+                saveUserData();
+                updateStatsUI();
+            }
+            nextTimeAttackQuestion();
+        }
+
+        function finishTimeAttack() {
+            const content = document.getElementById('taContent');
+            content.innerHTML = `
+                <div class="py-4 space-y-2">
+                    <h3 class="text-base font-bold text-slate-900">¡Tiempo Agotado!</h3>
+                    <p class="text-xs text-slate-600">Conseguiste ${appState.timeAttackScore} respuestas correctas.</p>
+                    <button onclick="startPracticeMode('timeattack')" class="w-full py-2.5 bg-slate-900 text-white rounded-xl text-xs font-semibold transition-all">
+                        Volver a Intentar
+                    </button>
+                </div>
+            `;
+        }
+
+        // PROGRESS & UI UPDATES
+        function updateStatsUI() {
+            document.getElementById('scoreCount').innerText = `${appState.score} pts`;
+            document.getElementById('streakCount').innerText = `${appState.streak} días`;
+            document.getElementById('headerStreakCount').innerText = `${appState.streak} días`;
+            const masteredCount = vocabularyData.filter(v => v.mastered).length;
+            document.getElementById('masteredCount').innerText = `${masteredCount} / ${vocabularyData.length}`;
+        }
+
+        function renderProgressList() {
+            const container = document.getElementById('vocabProgressList');
+            container.innerHTML = '';
+
+            vocabularyData.forEach(item => {
+                const row = document.createElement('div');
+                row.className = "pt-2 flex justify-between items-center text-xs";
+                row.innerHTML = `
+                    <div>
+                        <span class="font-bold text-slate-800">${item.word}</span>
+                        <span class="text-slate-400 block text-[10px]">${item.translation}</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md font-semibold ${item.mastered ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-500'}">
+                        ${item.mastered ? 'Aprendido' : 'Pendiente'}
+                    </span>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2000);
+        }
+
+        // PWA & INSTALLATION LOGIC
+        let deferredPrompt;
+        function setupPWA() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const installBtn = document.getElementById('installAppBtn');
+                if (installBtn) installBtn.style.display = 'flex';
+            });
+        }
+
+        function installAppPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('Instalando aplicación...');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                document.getElementById('installModal').classList.remove('hidden');
+            }
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
